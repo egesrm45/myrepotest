@@ -1,0 +1,218 @@
+<!-- Messenger Stili Giriş Sayfası (Facebook Tarzı) -->
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"></head><body><div class="messenger-login-bg">
+  <div class="messenger-login-center">
+    <div class="messenger-logo">messenger</div>
+    <div class="messenger-panel">
+      <div class="messenger-info">
+        <h2>Dünyanla Bağlantı Kur</h2>
+        <p>Messenger ile arkadaşlarınla kolayca sohbet et, fotoğraf ve dosya paylaş.</p>
+      </div>
+      <form class="vista-card messenger-form">
+        <input class="vista-input" type="text" placeholder="E-posta veya Telefon" autocomplete="username">
+        
+        <button class="vista-button"><div>Giriş Yap</div></button>
+        <a href="#" class="forgot-link">Şifremi Unuttum?</a>
+        <div class="divider"></div>
+        <button class="vista-button register"><div>Yeni Hesap Oluştur</div></button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<style>
+body, html {
+  background: #e7ebf0;
+  min-height: 100vh;
+  margin: 0;
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+.messenger-login-bg {
+  width: 100vw;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #e7ebf0, #dde8f6 80%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.messenger-login-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.messenger-logo {
+  font-size: 2.5rem;
+  font-family: 'Segoe UI', Verdana, Geneva, sans-serif;
+  color: #1977f3;
+  font-weight: bold;
+  margin-bottom: 24px;
+  letter-spacing: 1px;
+  text-shadow: 1px 1px 0 #fff, 1px 2px 0 #abc2e0;
+}
+
+.messenger-panel {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px -4px #01355020, 0 1px 0 #fff4 inset;
+  padding: 30px 40px 30px 40px;
+  display: flex;
+  flex-direction: row;
+  gap: 36px;
+  align-items: center;
+}
+
+.messenger-info {
+  max-width: 280px;
+}
+.messenger-info h2 {
+  color: #1b314d;
+  margin-bottom: 12px;
+  font-size: 1.4rem;
+}
+.messenger-info p {
+  color: #495867;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.messenger-form {
+  width: 240px;
+  padding: 18px 20px 14px 20px;
+  gap: 16px;
+  box-sizing: border-box;
+}
+
+.messenger-form .vista-input {
+  width: 100%;
+}
+
+.messenger-form .vista-button {
+  width: 100%;
+  margin-top: 6px;
+}
+
+.messenger-form .register {
+  margin-top: 0;
+  background: linear-gradient(#7ad7f0, #3b80fe 60%, #1569e3 100%);
+  border: none;
+  color: #fff;
+  font-weight: bold;
+  text-shadow: 1px 1px #3184b7;
+}
+
+.messenger-form .forgot-link {
+  font-size: 0.95em;
+  color: #1977f3;
+  display: block;
+  margin: 8px 0 0 0;
+  text-align: left;
+  text-decoration: none;
+}
+
+.messenger-form .divider {
+  margin: 16px 0;
+  height: 1px;
+  background: linear-gradient(90deg, #bbb 30%, #fff 100%);
+  border: none;
+}
+
+/* Vista Kart, Buton ve Input: verdiğin kodla aynı */
+.vista-card {
+  background: linear-gradient(#f8f8fa, #d2e3ef 85%, #a2b1c2);
+  border-radius: 12px;
+  padding: 20px 18px 14px 18px;
+  border: 1px solid #aaa;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: stretch;
+  box-shadow: 0 1px 0 #fff4 inset;
+}
+
+.vista-input {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #444;
+  font-size: 1rem;
+  outline: none;
+  box-shadow: 0 1px 0 #fff4 inset;
+  background: linear-gradient(#fff, #e8eaf1);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.vista-input:focus {
+  border-color: #0a83c8;
+  box-shadow: 0 0 8px #48b9ef55;
+}
+.vista-button {
+  position: relative;
+  cursor: pointer;
+  padding: 4px 8px;
+  border: 1px solid black;
+  border-radius: 4px;
+  color: #fff;
+  text-shadow: 1px 1px #000;
+  box-shadow:
+    inset 0px 4px 4px -3px #fff0,
+    inset 0px -3px 4px -3px #fff;
+  background: linear-gradient(#ddd, #999 50%, #000 50%);
+  isolation: isolate;
+  transition:
+    0.25s all,
+    0.1s background-position;
+}
+.vista-button::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: radial-gradient(circle at 50% 150%, #48b9ef, #0000 50%);
+  background-size: 300% 50%;
+  background-position: 50% 100%;
+  background-repeat: no-repeat;
+  opacity: 0;
+  transition: inherit;
+}
+.vista-button::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: radial-gradient(circle at 50% 320%, #48b9ef, #0000 50%);
+  background-size: 300% 50%;
+  background-position: 50% 0%;
+  background-repeat: no-repeat;
+  opacity: 0;
+  transition: inherit;
+}
+.vista-button:hover {
+  box-shadow:
+    inset 0px 4px 4px -3px #fff5,
+    inset 0px -3px 4px -3px #fff;
+}
+.vista-button:hover::before,
+.vista-button:hover::after {
+  opacity: 1;
+}
+.vista-button:active::before,
+.vista-button:active::after {
+  opacity: 0;
+}
+.vista-button:active {
+  box-shadow:
+    inset 0px 4px 4px -3px #000,
+    inset 0px -4px 4px -3px #000c,
+    inset 0px 0px 24px -3px #000a;
+  background-position: 1px 1px;
+}
+.vista-button div {
+  transition: 0.1s translate;
+}
+.vista-button:active div {
+  translate: 1px 1px;
+}
+</style>
+</body></html>

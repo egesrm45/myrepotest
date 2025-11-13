@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messenger</title>
+    <link rel="stylesheet" href="css/bingome.css">
+</head>
+<body>
+    
+    <video autoplay="autoplay" muted="muted" loop="" id="video-background">
+        <source src="Messengera_dosyalar/f.mp4" type="video/mp4">
+        Your browser does not support HTML5 video.
+    </video>
+
+    
+    <div id="authContainer" class="auth-container">
+        <div class="shine"></div>
+        <div class="auth-center">
+            
+            <div class="messenger-logo-row">
+                <div class="messenger-logo">freely</div>
+            </div>
+            
+<div class="auth-box">
+                
+                <div class="auth-info">
+                    
+                    <div class="container">
+                        <div class="slideshow">
+                            
+                            <div id="slide-1" class="slide">
+                                <a href="#slide-7"></a>
+                                <a href="#slide-2"></a>
+                                <img src="https://c1.staticflickr.com/9/8724/16310801553_cea90ae63d_n.jpg" />
+                            </div>
+                            
+                            <div id="slide-2" class="slide">
+                                <a href="#slide-1"></a>
+                                <a href="#slide-3"></a>
+                                <img src="https://c2.staticflickr.com/4/3719/19819674272_2384feaaf8_n.jpg" />
+                            </div>
+                            
+                            <div id="slide-3" class="slide">
+                                <a href="#slide-2"></a>
+                                <a href="#slide-4"></a>
+                                <img src="https://c2.staticflickr.com/2/1627/24319275501_3ec6f36fa7_n.jpg" />
+                            </div>
+                            
+                            <div id="slide-4" class="slide">
+                                <a href="#slide-3"></a>
+                                <a href="#slide-5"></a>
+                                <img src="https://c2.staticflickr.com/2/1460/25194537936_e3c54faefc_n.jpg" />
+                            </div>
+                            
+                            <div id="slide-5" class="slide">
+                                <a href="#slide-4"></a>
+                                <a href="#slide-6"></a>
+                                <img src="https://c2.staticflickr.com/2/1460/26216238325_9c425923a7_n.jpg" />
+                            </div>
+                            
+                            <div id="slide-6" class="slide">
+                                <a href="#slide-5"></a>
+                                <a href="#slide-7"></a>
+                                <img src="https://c2.staticflickr.com/8/7578/26194232483_8204bf119b_n.jpg" />
+                            </div>
+                            
+                            <div id="slide-7" class="slide">
+                                <a href="#slide-6"></a>
+                                <a href="#slide-1"></a>
+                                <img src="https://c2.staticflickr.com/8/7106/26862741906_d5283c42ba_n.jpg" />
+                            </div>
+                        </div>
+
+                        <div class="pagination">
+                            <a href="#slide-1"><span>1</span></a>
+                            <a href="#slide-2"><span>2</span></a>
+                            <a href="#slide-3"><span>3</span></a>
+                            <a href="#slide-4"><span>4</span></a>
+                            <a href="#slide-5"><span>5</span></a>
+                            <a href="#slide-6"><span>6</span></a>
+                            <a href="#slide-7"><span>7</span></a>
+                        </div>
+                    </div>
+                    <div class="divider"></div>
+
+                    <p>
+                        freely ile arkadaşlarınla kolayca sohbet et, fotoğraf ve dosya paylaş.
+                    </p>
+                </div>
+
+                <div id="loginForm" class="auth-form">
+                    <div id="authError" class="error" style="display: none;"></div>
+                    <div class="textbar-group">
+                        <svg class="textbar-icon" aria-hidden="true" viewBox="0 0 24 24">
+                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path>
+                        </svg>
+                        <input type="text" id="loginUsername" placeholder="e-posta" class="textbar-input" autocomplete="username">
+                    </div>
+                    <button class="btn" onclick="login()"><div>giriş yap</div></button>
+                    <div class="divider"></div>
+                    <button class="btn register" onclick="alert('Registration feature is not yet active.')"><div>kaydol</div></button>
+                </div>
+
+                <div id="registerForm" class="auth-form" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="appContainer" class="app-container">
+        <div class="app-header">
+            <h1>Messenger</h1>
+            <div class="user-info">
+                <span id="currentUserName"></span>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+        </div>
+        <div class="main-content">
+            <div class="sidebar">
+                <div class="sidebar-header">
+                    <h2>Conversations</h2>
+                    <button class="new-chat-btn" onclick="showNewChatModal()">+ New</button>
+                </div>
+                <div id="conversationsList" class="conversations-list"></div>
+            </div>
+            <div class="chat-area">
+                <div id="emptyState" class="empty-state">
+                    Select a conversation to start messaging
+                </div>
+                <div id="chatContainer" style="display: none; flex: 1; display: flex; flex-direction: column;">
+                    <div class="chat-header">
+                        <h3 id="chatHeaderName"></h3>
+                    </div>
+                    <div id="chatMessages" class="chat-messages"></div>
+                    <div class="chat-input">
+                        <input type="text" id="messageInput" placeholder="Type a message..." onkeypress="handleMessageKeyPress(event)">
+                        <button class="send-btn" onclick="sendMessage()">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="newChatModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close-modal" onclick="closeNewChatModal()">×</span>
+                <h2>New Conversation</h2>
+            </div>
+            <div id="usersList"></div>
+        </div>
+    </div>
+
+	<div class="stats-bar" id="statsBar">
+		<div class="stats-content">
+			<span class="stat-item">Toplam Kullanıcı: <b id="totalUsers">15.452</b></span>
+			<span class="stat-separator">|</span>
+			<span class="stat-item">Şu an Online: <b id="onlineUsers">3.124</b></span>
+		</div>
+	</div>
+
+	<div id="cookieBanner" class="cookie-banner">
+        <div class="cookie-inner-content">
+            <div class="cookie-text">
+                Sitemizde deneyimi **iyileştirmek**, size uygun hizmetleri sunabilmek adına gerekli çerezleri kullanıyoruz. Onayınız olması halinde reklam çerezleri de kullanılacaktır. Çerez ayarlarına ve Aydınlatma Metni'ne **"Tercihler"** seçeneğinden erişebilirsiniz.
+            </div>
+            <div class="cookie-buttons">
+                <button class="cookie-btn preferences" onclick="showCookiePreferences()">Tercihler</button>
+                <button class="cookie-btn reject" onclick="rejectCookies()">Reddet</button>
+                <button class="cookie-btn accept" onclick="acceptCookies()">Kabul Et</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="top-footbar">
+        <div class="top-footbar-content">
+            <div class="language-links">
+                <a href="#">English (US)</a>
+                <a href="#">Español</a>
+                <a href="#">Português (Brasil)</a>
+                <a href="#">Français (France)</a>
+                <a href="#">Deutsch</a>
+                <a href="#">Italiano</a>
+                <a href="#">العربية</a>
+                <a href="#">हिन्दी</a>
+                <a href="#">中文(简体)</a>
+                <a href="#">日本語</a>
+                <a href="#">...</a>
+            </div>
+            <div class="meta-links">
+                <a href="#">About</a>
+                <a href="#">Advertising</a>
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+                <a href="#">Help</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentUser = null;
+        let activeConversationId = null;
+        let pollInterval = null;
+
+        /* YENİ EKLENEN: Çerez Yönetimi Fonksiyonları */
+        function hideCookieBanner() {
+            document.getElementById('cookieBanner').style.display = 'none';
+        }
+
+        function acceptCookies() {
+            localStorage.setItem('cookieConsent', 'accepted');
+            hideCookieBanner();
+        }
+
+        function rejectCookies() {
+            localStorage.setItem('cookieConsent', 'rejected');
+            hideCookieBanner();
+        }
+
+        function showCookiePreferences() {
+            alert('Çerez ayarlarınızı özelleştirebileceğiniz "Tercihler" bölümüne yönlendiriliyorsunuz.');
+            // Gerçek uygulamada burası bir modal açar veya yeni sayfaya yönlendirir.
+        }
+
+        /* SADECE KULLANICI ADI İLE GİRİŞ YAPILACAK ŞEKİLDE DÜZELTİLDİ */
+        async function login() {
+            const username = document.getElementById('loginUsername').value;
+            const errorDiv = document.getElementById('authError');
+
+            if (!username) {
+                errorDiv.textContent = 'e-posta girmedin';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            // Şifre göndermeden API'ye istek yapılıyor
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    // Sadece kullanıcı adını gönderiyoruz (API'nizin şifresiz giriş için bunu kabul ettiğini varsayıyoruz)
+                    body: JSON.stringify({ username: username, password: "" }) 
+                });
+
+                if (response.ok) {
+                    currentUser = await response.json();
+                    showApp();
+                } else {
+                    const error = await response.json();
+                    errorDiv.textContent = error.error || 'Login failed. Check username.';
+                    errorDiv.style.display = 'block';
+                }
+            } catch (error) {
+                errorDiv.textContent = 'lütfen daha sonra tekrar deneyin';
+                errorDiv.style.display = 'block';
+            }
+        }
+
+        // --- APP FONKSİYONLARI DEĞİŞMEDEN KALDI ---
+        async function logout() {
+            await fetch('/api/logout', {
+                method: 'POST',
+                credentials: 'include'
+            });
+            stopPolling();
+            currentUser = null;
+            activeConversationId = null;
+            document.getElementById('authContainer').style.display = 'flex';
+            document.getElementById('appContainer').style.display = 'none';
+        }
+
+        function showApp() {
+            document.getElementById('authContainer').style.display = 'none';
+            document.getElementById('appContainer').style.display = 'block';
+            document.getElementById('currentUserName').textContent = currentUser.display_name || currentUser.username;
+            loadConversations();
+            startPolling();
+        }
+
+        async function loadConversations() {
+            try {
+                const response = await fetch('/api/conversations', {
+                    credentials: 'include'
+                });
+                const conversations = await response.json();
+                renderConversations(conversations);
+            } catch (error) {
+                console.error('Failed to load conversations:', error);
+            }
+        }
+
+        function renderConversations(conversations) {
+            const list = document.getElementById('conversationsList');
+            if (conversations.length === 0) {
+                list.innerHTML = '<div style="padding: 20px; text-align: center; color: #999;">No conversations yet. Click "+ New" to start chatting!</div>';
+                return;
+            }
+
+            list.innerHTML = conversations.map(conv => `
+                <div class="conversation-item ${conv.id === activeConversationId ? 'active' : ''}" onclick="openConversation(${conv.id})">
+                    <div class="conversation-avatar">${(conv.display_name || conv.username).charAt(0).toUpperCase()}</div>
+                    <div class="conversation-info">
+                        <div class="conversation-name">${conv.display_name || conv.username}</div>
+                        <div class="conversation-preview">${conv.last_message || 'No messages yet'}</div>
+                    </div>
+                    ${conv.unread_count > 0 ? `<div class="conversation-badge">${conv.unread_count}</div>` : ''}
+                </div>
+            `).join('');
+        }
+
+        async function openConversation(userId) {
+            activeConversationId = userId;
+            loadConversations();
+            
+            try {
+                const [messagesResponse, usersResponse] = await Promise.all([
+                    fetch(`/api/messages/${userId}`, { credentials: 'include' }),
+                    fetch('/api/users', { credentials: 'include' })
+                ]);
+                
+                const messages = await messagesResponse.json();
+                const users = await usersResponse.json();
+                const user = users.find(u => u.id === userId);
+                
+                document.getElementById('emptyState').style.display = 'none';
+                document.getElementById('chatContainer').style.display = 'flex';
+                document.getElementById('chatHeaderName').textContent = user.display_name || user.username;
+                
+                renderMessages(messages);
+            } catch (error) {
+                console.error('Failed to load messages:', error);
+            }
+        }
+
+        function renderMessages(messages) {
+            const container = document.getElementById('chatMessages');
+            container.innerHTML = messages.map(msg => {
+                const isSent = msg.sender_id === currentUser.id;
+                const time = new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                return `
+                    <div class="message ${isSent ? 'sent' : 'received'}">
+                        <div class="message-bubble">
+                            ${msg.content}
+                            <div class="message-time">${time}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            container.scrollTop = container.scrollHeight;
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const content = input.value.trim();
+            
+            if (!content || !activeConversationId) return;
+            
+            try {
+                await fetch('/api/messages', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({
+                        recipient_id: activeConversationId,
+                        content: content
+                    })
+                });
+                
+                input.value = '';
+                openConversation(activeConversationId);
+            } catch (error) {
+                console.error('Failed to send message:', error);
+            }
+        }
+
+        function handleMessageKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        async function showNewChatModal() {
+            try {
+                const response = await fetch('/api/users', {
+                    credentials: 'include'
+                });
+                const users = await response.json();
+                
+                const list = document.getElementById('usersList');
+                list.innerHTML = users.map(user => `
+                    <div class="user-list-item" onclick="startNewConversation(${user.id})">
+                        <div class="conversation-avatar">${(user.display_name || user.username).charAt(0).toUpperCase()}</div>
+                        <div class="conversation-info">
+                            <div class="conversation-name">${user.display_name || user.username}</div>
+                            <div class="conversation-preview">@${user.username}</div>
+                        </div>
+                        <div class="status-indicator ${user.status === 'online' ? 'online' : ''}"></div>
+                    </div>
+                `).join('');
+                
+                document.getElementById('newChatModal').style.display = 'flex';
+            } catch (error) {
+                console.error('Failed to load users:', error);
+            }
+        }
+
+        function closeNewChatModal() {
+            document.getElementById('newChatModal').style.display = 'none';
+        }
+
+        function startNewConversation(userId) {
+            closeNewChatModal();
+            openConversation(userId);
+        }
+
+        function startPolling() {
+            if (pollInterval) return;
+            pollInterval = setInterval(() => {
+                loadConversations();
+                if (activeConversationId) {
+                    fetch(`/api/messages/${activeConversationId}`, { credentials: 'include' })
+                        .then(r => r.json())
+                        .then(messages => renderMessages(messages))
+                        .catch(err => console.error('Polling error:', err));
+                }
+            }, 2000);
+        }
+
+        function stopPolling() {
+            if (pollInterval) {
+                clearInterval(pollInterval);
+                pollInterval = null;
+            }
+        }
+
+        async function checkAuth() {
+            try {
+                const response = await fetch('/api/me', {
+                    credentials: 'include'
+                });
+                if (response.ok) {
+                    currentUser = await response.json();
+                    showApp();
+                }
+            } catch (error) {
+                console.log('Not authenticated');
+            }
+        }
+
+        // Sayfa yüklendiğinde çerez izni olup olmadığını kontrol etme (yeni eklendi)
+        document.addEventListener('DOMContentLoaded', () => {
+            const consent = localStorage.getItem('cookieConsent');
+            if (consent) {
+                // İzin daha önce verilmişse bildirimi gizle
+                document.getElementById('cookieBanner').style.display = 'none';
+            }
+        });
+
+        checkAuth();
+    </script>
+
+
+
+</body></html>
