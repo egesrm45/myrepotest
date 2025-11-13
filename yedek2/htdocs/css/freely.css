@@ -1,0 +1,971 @@
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        p {
+            display: block;
+            margin-block-start: 1em;
+            margin-block-end: 1em;
+            margin-inline-start: 0px;
+            margin-inline-end: 0px;
+            unicode-bidi: isolate;
+            margin: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+/* === YENİ EKLENEN PURE CSS SLIDER STİLLERİ === */
+
+/* Ana konteyner (auth-info kutusuna sığması için uyarlandı) */
+.auth-info .container {
+    border-radius: 5px;
+    position: relative;
+    transition: box-shadow 200ms;
+    width: 100%; /* max-width: 255px yerine */
+    margin: 0; /* margin: 0 auto 20px yerine */
+}
+
+/* (İsteğe bağlı) Gölge efekti. Çok güçlüyse silebilirsin. */
+.auth-info .container:hover {
+    box-shadow: 0 0 15px 5px rgba(0,0,0,0.25);
+}
+
+.slideshow {
+    position: relative;
+    width: 100%;
+}
+
+/* Slaytların en-boy oranını korur (6:4) */
+.slideshow:after {
+    content: '';
+    display: block;
+    padding-bottom: calc((100% / 6) * 4);
+}
+
+/* Hover olduğunda okları göster */
+.slideshow:hover a {
+    opacity: 1;
+}
+
+/* Slider okları (sağ/sol) */
+.slideshow a {
+    opacity: 0;
+    position: relative;
+    text-decoration: none;
+    transition: opacity 0.5s;
+    z-index: 5; /* Pagination'un altında kalmaması için eklendi */
+}
+
+.slideshow a:after {
+    border-color: #FFF #FFF transparent transparent;
+    border-style: solid;
+    border-width: 2px;
+    color: #FFF;
+    display: block;
+    height: 10px;
+    position: absolute;
+    top: calc(50% - 5px);
+    width: 10px;
+    text-shadow: 1px 1px 2px #000; /* Görünürlük için gölge eklendi */
+}
+
+/* Sol ok */
+.slideshow a:first-child:after {
+    content: '';
+    left: 10px;
+    transform: rotate(-135deg);
+}
+
+/* Sağ ok */
+.slideshow a:nth-child(2):after {
+    content: '';
+    right: 10px;
+    transform: rotate(45deg);
+}
+
+/* Her bir slayt */
+.slideshow .slide {
+    background-color: #FFF;
+    box-sizing: border-box;
+    display: none;
+    height: 100%;
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+    border-radius: 5px; /* Kutuya uyması için eklendi */
+    overflow: hidden; /* Kutuya uyması için eklendi */
+}
+
+/* Aktif slaytı (ve ilk slaytı) göster */
+.slideshow .slide:first-child,
+.slideshow .slide:target {
+    display: block;
+}
+
+/* Slayt içindeki görünmez linkler (sol/sağ) */
+.slideshow .slide a {
+    display: block;
+    height: 100%;
+    position: absolute;
+    width: 50%;
+}
+
+/* Sağ taraftaki link */
+.slideshow .slide a:nth-child(2) {
+    left: 50%;
+}
+
+/* Slayt resimleri (düzgün sığması için uyarlandı) */
+.slideshow .slide img {
+    border-radius: 5px;
+    width: 100%;
+    height: 100%; /* Eklendi */
+    object-fit: cover; /* Resmin yayılmasını sağlar */
+}
+
+/* Noktalı navigasyon (pagination) */
+.pagination {
+    display: flex;
+    bottom: 10px;
+    justify-content: center;
+    position: absolute;
+    width: 100%;
+    z-index: 10;
+}
+
+.pagination a {
+    background: rgba(255, 255, 255, 0.75);
+    border-radius: 50%;
+    display: block;
+    height: 10px;
+    width: 10px;
+    box-shadow: 0 0 3px rgba(0,0,0,0.5); /* Görünürlük için eklendi */
+}
+
+.pagination a:not(:last-child) {
+    margin-right: 5px;
+}
+
+/* Numaraları gizle (sadece noktalar kalsın) */
+.pagination a span {
+    display: none;
+}
+
+/* === SLIDER STİLLERİ BİTİŞ === */
+
+        .auth-info p {
+            color: #fff; 
+            text-shadow: 1px 1px 2px #00000077;
+            font-size: 1.03rem;
+        }
+        
+        /* VİDEO ARKA PLANI */
+        #video-background {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: -100;
+            background-size: cover;
+            filter: brightness(0.75) contrast(1.1); 
+        }
+
+		.stats-bar {
+			position: absolute;
+			bottom: 880px; /* footbar'ın (yaklaşık 45px) biraz üstüne konumlandırıldı */
+			left: 0;
+			width: 100%;
+			background: #000000a0; /* Okunurluk için hafif şeffaf siyah arka plan */
+			padding: 10px 0;
+			z-index: 5; 
+			font-size: 0.9rem;
+			text-align: center;
+			color: #ffffff;
+			box-shadow: 0 -1px 5px rgba(0,0,0,0.4);
+		}
+
+		.stats-content {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			max-width: 1000px;
+			margin: 0 auto;
+			padding: 0 15px;
+		}
+
+		.stat-item {
+			margin: 0 15px;
+			white-space: nowrap;
+			text-shadow: 1px 1px 2px #000;
+		}
+
+		.stat-separator {
+			color: #ffffff88;
+		}
+
+
+
+        /* DİL VE BAĞLANTI ÇUBUĞU (ŞEFFAF FOOTBAR) */
+        .top-footbar {
+            position: absolute;
+            bottom: 0; 
+            left: 0;
+            width: 100%;
+            background: transparent; /* Tamamen şeffaf yapıldı */
+            border-top: none; /* Kenarlık kaldırıldı */
+            padding: 8px 0 10px 0; 
+            box-shadow: none; /* Gölge kaldırıldı */
+            z-index: 5; 
+            font-size: 0.8rem;
+        }
+
+        .top-footbar-content {
+            display: flex;
+            flex-direction: column; 
+            justify-content: center;
+            align-items: center; 
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 15px;
+            text-align: center;
+        }
+
+        .language-links, .meta-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 5px;
+        }
+
+        /* Bağlantı renkleri beyaz/açık ton yapıldı */
+        .language-links a, .meta-links a {
+            color: #ffffffcc; /* Daha belirgin açık renk */
+            text-decoration: none;
+            margin: 0 7px; 
+            padding: 0 2px;
+            white-space: nowrap;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8); /* Arka plan videosu üzerinde okunurluk için gölge eklendi */
+        }
+
+        .language-links {
+            padding-right: 0; 
+            border-right: none;
+        }
+
+        .meta-links {
+            margin-left: 0; 
+            border-top: 1px solid #ffffff33; /* Hafif şeffaf beyaz ayraç */
+            padding-top: 5px;
+        }
+        
+        /* AUTH CONTAINER (DAHA YUKARI ALINDI) */
+        .auth-container {
+            width: 100vw;
+            min-height: 100vh;
+            background: rgba(255, 255, 255, 0.1); 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start; 
+            padding-top: 10vh; /* YENİ, DAHA YÜKSEK KONUM */
+            overflow-x: hidden;
+            position: relative;
+            padding-bottom: 60px; 
+        }
+
+        /* SHINE EFEKTİ (MAKSİMUM GÜÇ) */
+        .shine {
+            position: absolute;
+            top: 5vh; 
+            left: 10vw; 
+            right: 10vw; 
+            height: 500px;
+            z-index: 0;
+            background: radial-gradient(circle at 50% 50%, #aadffd99 0%, #f1faff00 75%);
+            filter: blur(25px);
+            opacity: 0.70;
+            animation: shineAnim 8s ease-in-out infinite alternate;
+        }
+
+        @keyframes shineAnim {
+            0% {
+                transform: translateY(-10px);
+                opacity: 0.9;
+            }
+            100% {
+                transform: translateY(10px);
+                opacity: 0.7;
+            }
+        }
+        /* SHINE EFEKTİ STİLLERİ SONU */
+
+        .auth-center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 1;
+            width: 100%;
+            transform: none; 
+        }
+
+        .messenger-logo-row {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            margin-bottom: 24px;
+            justify-content: center;
+            margin-top: 0; 
+            z-index: 5;
+        }
+
+        .logo-ava {
+            width: 54px;
+            height: 54px;
+        }
+
+        .messenger-logo {
+            font-size: 2.5rem;
+            font-family: Poppins,"Poppins Fallback";
+            color: aliceblue; 
+            text-shadow: 1px 1px 0 #1977f3, 1px 2px 2px #00000080; 
+            font-weight: bold;
+            letter-spacing: 1px;
+            direction: ltr;
+            font-weight: 700;
+            font-style: normal;
+        }
+
+        .auth-box {
+            background: rgba(255, 255, 255, 0.2); 
+            border-radius: 14px;
+            box-shadow: 0 4px 32px -8px #1977f33a, 0 2px 0 #ffffff1a inset;
+            padding: 30px 34px 30px 32px;
+            display: flex;
+            flex-direction: row;
+            gap: 40px;
+            align-items: center;
+            max-width: 660px;
+            backdrop-filter: blur(2px); 
+        }
+
+        .auth-info {
+            max-width: 270px;
+            min-width: 150px;
+        }
+
+        .auth-info h2 {
+            color: #fff; 
+            text-shadow: 1px 1px 2px #00000077;
+            margin-bottom: 14px;
+            font-size: 1.34rem;
+        }
+
+        .slogan-list {
+            margin: 0 0 0 4px;
+            padding: 0;
+            list-style: none;
+        }
+
+        .slogan-list li {
+            margin-bottom: 10px;
+            color: #fff; 
+            text-shadow: 1px 1px 2px #00000077;
+            font-size: 1.03rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .slogan-list li span {
+            font-size: 1.16em;
+        }
+
+        /* FORM SADELEŞTİRİLDİ */
+        .auth-form {
+            width: 250px;
+            box-sizing: border-box;
+            gap: 16px;
+            padding: 18px 20px 14px 20px;
+            background: rgba(255, 255, 255, 0.4); 
+            border-radius: 12px;
+            border: 1px solid #aaa;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 2px 18px -8px #9fc9e2a0, 0 1px 0 #ffffff40 inset;
+            backdrop-filter: blur(5px); 
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+        }
+
+        .textbar-group {
+            position: relative;
+            display: flex;
+            align-items: center;
+            margin-bottom: 0px; 
+        }
+
+        .textbar-input {
+            width: 100%;
+            height: 42px;
+            padding-left: 2.8rem;
+            padding-right: 1rem;
+            border-radius: 8px;
+            border: 1.8px solid #3b5998;
+            background: linear-gradient(to bottom, #f7fbff, #dbe6f0);
+            color: #1a2849;
+            font-size: 1rem;
+            box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.8), 0 2px 6px rgba(0, 0, 0, 0.05);
+            outline: none;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+        }
+
+        .textbar-input:focus {
+            border-color: #1977f3;
+            background: #ffffff;
+            box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.9), 0 0 10px 3px rgba(25, 119, 243, 0.5);
+        }
+
+        .textbar-input::placeholder {
+            color: #a0aabc;
+        }
+
+        /* KULLANICI İKONU */
+        .textbar-icon {
+            position: absolute;
+            left: 0.9rem;
+            fill: #4267b2;
+            width: 1.25rem;
+            height: 1.25rem;
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        .btn {
+            position: relative;
+            cursor: pointer;
+            padding: 7px 8px;
+            border: 1px solid black;
+            border-radius: 4px;
+            color: #fff;
+            text-shadow: 1px 1px #000;
+            box-shadow: inset 0px 4px 4px -3px #fff0, inset 0px -3px 4px -3px #fff;
+            background: linear-gradient(#ddd, #999 50%, #000 50%);
+            isolation: isolate;
+            transition: 0.25s all, 0.1s background-position;
+            font-size: 1rem;
+            width: 100%;
+            margin-top: 6px;
+        }
+
+        .btn::after {
+            content: "";
+            position: absolute;
+            z-index: -1;
+            inset: 0;
+            background: radial-gradient(circle at 50% 150%, #48b9ef, #0000 50%);
+            background-size: 300% 50%;
+            background-position: 50% 100%;
+            background-repeat: no-repeat;
+            opacity: 0;
+            transition: inherit;
+        }
+
+        .btn::before {
+            content: "";
+            position: absolute;
+            z-index: -1;
+            inset: 0;
+            background: radial-gradient(circle at 50% 320%, #48b9ef, #0000 50%);
+            background-size: 300% 50%;
+            background-position: 50% 0%;
+            background-repeat: no-repeat;
+            opacity: 0;
+            transition: inherit;
+        }
+
+        .btn:hover {
+            box-shadow: inset 0px 4px 4px -3px #fff5, inset 0px -3px 4px -3px #fff;
+        }
+
+        .btn:hover::before,
+        .btn:hover::after {
+            opacity: 1;
+        }
+
+        .btn:active::before,
+        .btn:active::after {
+            opacity: 0;
+        }
+
+        .btn:active {
+            box-shadow: inset 0px 4px 4px -3px #000, inset 0px -4px 4px -3px #000c, inset 0px 0px 24px -3px #000a;
+            background-position: 1px 1px;
+        }
+
+        .btn div {
+            transition: 0.1s translate;
+        }
+
+        .btn:active div {
+            translate: 1px 1px;
+        }
+
+        .btn.register {
+            margin-top: 0;
+            background: linear-gradient(#7ad7f0, #3b80fe 60%, #1569e3 100%);
+            border: none;
+            color: #fff;
+            font-weight: bold;
+            text-shadow: 1px 1px #3184b7;
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .error {
+            color: #ffdddd; 
+            background: #d13438;
+            padding: 5px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        
+        /* AYRAÇ STİLİ */
+        .divider {
+            margin: 16px 0 6px 0;
+            height: 1px;
+            background: linear-gradient(90deg, #bbbbbb66 30%, #ffffff66 100%);
+            border: none;
+        }
+
+
+        @media (max-width: 750px) {
+            .auth-container {
+                padding-top: 10vh; 
+            }
+            .auth-box {
+                flex-direction: column;
+                padding: 22px 18px;
+                gap: 18px;
+            }
+            .auth-form {
+                width: 100%;
+                min-width: 180px;
+            }
+			.auth-info {
+				color: #fff; 
+				text-shadow: 1px 1px 2px #00000077;
+				font-size: 1.03rem;
+			}
+        }
+
+        /* ... (Uygulama arayüzü CSS kodları devam ediyor) ... */
+        .app-container {
+            display: none;
+            height: 100vh;
+            background: #f0f0f0;
+        }
+
+        .app-header {
+            background: #0078d4;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .app-header h1 {
+            font-size: 20px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logout-btn {
+            background: #006abc;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .logout-btn:hover {
+            background: #005a9e;
+        }
+
+        .main-content {
+            display: flex;
+            height: calc(100vh - 60px);
+        }
+
+        .sidebar {
+            width: 320px;
+            background: white;
+            border-right: 1px solid #ddd;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .sidebar-header h2 {
+            font-size: 18px;
+            color: #333;
+        }
+
+        .new-chat-btn {
+            background: #0078d4;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .conversations-list {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .conversation-item {
+            padding: 15px;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .conversation-item:hover {
+            background: #f5f5f5;
+        }
+
+        .conversation-item.active {
+            background: #e3f2fd;
+        }
+
+        .conversation-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #0078d4;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .conversation-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .conversation-name {
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 3px;
+        }
+
+        .conversation-preview {
+            font-size: 13px;
+            color: #666;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .conversation-badge {
+            background: #0078d4;
+            color: white;
+            border-radius: 12px;
+            padding: 2px 8px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .chat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #e5e5e5;
+        }
+
+        .chat-header {
+            background: white;
+            padding: 15px 20px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .chat-header h3 {
+            font-size: 18px;
+            color: #333;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .message.sent {
+            flex-direction: row-reverse;
+        }
+
+        .message-bubble {
+            max-width: 60%;
+            padding: 10px 15px;
+            border-radius: 18px;
+            word-wrap: break-word;
+        }
+
+        .message.received .message-bubble {
+            background: white;
+            color: #333;
+        }
+
+        .message.sent .message-bubble {
+            background: #0078d4;
+            color: white;
+        }
+
+        .message-time {
+            font-size: 11px;
+            color: #999;
+            margin-top: 5px;
+        }
+
+        .chat-input {
+            background: white;
+            padding: 15px 20px;
+            border-top: 1px solid #ddd;
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        .chat-input input:focus {
+            outline: none;
+            border-color: #0078d4;
+        }
+
+        .send-btn {
+            background: #0078d4;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+        .send-btn:hover {
+            background: #006abc;
+        }
+
+        .send-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .empty-state {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #999;
+            font-size: 18px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            width: 400px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            font-size: 22px;
+            color: #333;
+        }
+
+        .user-list-item {
+            padding: 12px;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-list-item:hover {
+            background: #f5f5f5;
+        }
+
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #ccc;
+        }
+
+        .status-indicator.online {
+            background: #00c853;
+        }
+
+        .close-modal {
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            color: #999;
+            cursor: pointer;
+        }
+
+        .close-modal:hover {
+            color: #333;
+        }
+
+/* YENİ VE REVİZE EDİLMİŞ: Çerez Bildirimi Stilleri (Uyumlu UI) */
+        .cookie-banner {
+            position: fixed; /* Ekranın hep aynı yerinde kalmasını sağlar */
+            bottom: 0; /* Alt kısma yaslar */
+            left: 0;
+            width: 100%;
+            /* Cam efekti için: Şeffaf beyaz arka plan ve blur */
+            background: rgba(255, 255, 255, 0.15); 
+            backdrop-filter: blur(4px);
+            border-top: 1px solid rgba(255, 255, 255, 0.3); /* Açık renkli ayraç */
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
+            padding: 15px 20px;
+            z-index: 1000; 
+            display: flex; 
+            align-items: center;
+            justify-content: center; /* Ortalamak için */
+            font-size: 0.95rem;
+            color: white; /* Koyu arka plan üzerinde beyaz metin */
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+        }
+
+        .cookie-inner-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1000px; /* Merkeze hizalamak için */
+            width: 100%;
+        }
+
+        .cookie-text {
+            flex-grow: 1; 
+            max-width: 65%;
+            margin-right: 20px;
+            line-height: 1.4;
+        }
+
+        .cookie-buttons {
+            display: flex;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        .cookie-btn {
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            border: 1px solid #1569e3; /* Mavi tonlu kenarlık */
+            color: white;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.4);
+            /* Giriş sayfasındaki butonlara benzer mavi gradient */
+            background: linear-gradient(#7ad7f0, #3b80fe 60%, #1569e3 100%); 
+            transition: opacity 0.2s, transform 0.1s;
+        }
+        
+        .cookie-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* Mobil uyumluluk için, metnin akışını bozmamak adına */
+        @media (max-width: 600px) {
+            .cookie-banner {
+                padding-bottom: 20px;
+            }
+            .cookie-inner-content {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .cookie-text {
+                max-width: 100%;
+                margin-bottom: 15px;
+                margin-right: 0;
+            }
+            .cookie-buttons {
+                width: 100%;
+                justify-content: space-between;
+            }
+            .cookie-btn {
+                flex: 1;
+            }
+        }
+    
