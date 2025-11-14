@@ -1,0 +1,79 @@
+COPY ALL FILES INTO YOUR ROOT FOLDER.
+
+Open LocaleInfo.py
+
+Add:
+
+def PrivateShopSecondToDHMS(time):
+    if time < 60:
+        return "%.2fseg." % time
+
+    second = int(time % 60)
+    minute = int((time / 60) % 60)
+    hour = int((time / 60) / 60) % 24
+    day = int(int((time / 60) / 60) / 24)
+
+    text = ""
+
+    if day > 0:
+        text += str(day) + "d "
+        text += " "
+
+    if hour > 0:
+        text += str(hour) + "h "
+        text += " "
+
+    if minute > 0:
+        text += str(minute) + "m "
+
+    if second > 0:
+        text += str(second) + "s "
+
+    return text
+
+
+Open Game.py
+
+Search: onPressKeyDict[app.DIK_F4]	= lambda : self.__PressQuickSlot(7)
+
+Add after:
+
+		onPressKeyDict[app.DIK_F8]    = lambda : self.interface.wndTradeHouse.Open()
+
+Now, you can open the panel with F8, but you can bind on other key.
+
+Open interfacemodule.py
+
+Search: import uiScriptLocale
+
+Add after:
+
+import uitradehouse
+
+Search self.wndInventory = None in __init__ of Interface class function.
+
+Add after:
+
+		self.wndTradeHouse = None
+
+Search: wndCharacter = uiCharacter.CharacterWindow()
+
+Add after:
+		self.wndTradeHouse = uitradehouse.TradeHouse()
+
+Search:
+
+		if self.wndCharacter:
+			self.wndCharacter.Destroy()
+
+Add after:
+
+		if self.wndTradeHouse:
+			self.wndTradeHouse.Destroy()
+
+Search: del self.wndInventory
+
+Add after:
+
+		del self.wndTradeHouse
+

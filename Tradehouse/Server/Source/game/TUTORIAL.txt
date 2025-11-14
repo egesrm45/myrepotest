@@ -1,0 +1,211 @@
+COPY TRADEHOUSE FILES IN TO YOUR GAME SRC
+
+Add tradehouse.cpp in MAKEFILE
+
+Open cmd.cpp
+
+Add after includes:
+
+#ifdef TRADEHOUSE_SYSTEM
+ACMD(do_tradehouse);
+#endif
+
+Search:
+{ "\n",		NULL,			0,			POS_DEAD,	GM_IMPLEMENTOR	}
+
+Add BEFORE:
+
+#ifdef TRADEHOUSE_SYSTEM
+	{ "tradehouse",				do_tradehouse,				0,	POS_DEAD,	GM_PLAYER },
+#endif	
+
+Open cmd_general.cpp
+
+Add after includes:
+
+#ifdef TRADEHOUSE_SYSTEM
+#include "tradehouse.h"
+#endif
+
+Add somewhere:
+
+#ifdef TRADEHOUSE_SYSTEM
+ACMD(do_tradehouse)
+{
+	char arg1[256], arg2[256], arg3[256], arg4[256], arg5[256], arg6[256];
+
+	argument = two_arguments(argument, arg1, sizeof(arg1), arg2, sizeof(arg2));
+	argument = two_arguments(argument, arg3, sizeof(arg3), arg4, sizeof(arg4));
+	argument = two_arguments(argument, arg5, sizeof(arg5), arg6, sizeof(arg6));
+
+	if (!*arg1)
+		return;
+
+	if (std::string(arg1) == "add")
+	{
+		if (!*arg2 || !*arg3)
+			return;
+
+		int slot;
+		str_to_number(slot, arg2);
+
+		DWORD price;
+		str_to_number(price, arg3);
+
+		//ch->ChatPacket(0, "Add %d %d", slot, price);
+
+		TradeHouse::instance().AddItem(ch, slot, price);
+	}
+	else if (std::string(arg1) == "show")
+	{
+		if (!*arg2 || !*arg3 || !*arg4 || !*arg5 || !*arg6)
+			return;
+
+		int category;
+		str_to_number(category, arg2);
+
+		int subcategory;
+		str_to_number(subcategory, arg3);
+
+		int offset;
+		str_to_number(offset, arg4);
+
+		int asc;
+		str_to_number(asc, arg5);
+
+		int vnum;
+		str_to_number(vnum, arg6);
+
+		TradeHouse::instance().Show_Items(ch, category, subcategory, offset, false, false, asc, vnum);
+	}
+	else if (std::string(arg1) == "storage")
+	{
+		if (!*arg2)
+			return;
+
+		int offset;
+		str_to_number(offset, arg2);
+
+		TradeHouse::instance().Show_Items(ch, 0, 0, offset, true, false);
+	}
+	else if (std::string(arg1) == "get")
+	{
+		if (!*arg2)
+			return;
+
+		DWORD unique;
+		str_to_number(unique, arg2);
+
+		TradeHouse::instance().GetItem(ch, unique);
+	}
+	else if (std::string(arg1) == "buy")
+	{
+		if (!*arg2)
+			return;
+
+		DWORD unique;
+		str_to_number(unique, arg2);
+
+		TradeHouse::instance().BuyItem(ch, unique);
+	}
+	else if (std::string(arg1) == "add_balance")
+	{
+		if (!*arg2)
+			return;
+
+		DWORD balance;
+		str_to_number(balance, arg2);
+
+		TradeHouse::instance().Add_Balance(ch, balance);
+	}
+	else if (std::string(arg1) == "get_balance")
+	{
+		if (!*arg2)
+			return;
+
+		DWORD balance;
+		str_to_number(balance, arg2);
+
+		TradeHouse::instance().Get_Balance(ch, balance);
+	}
+	else if (std::string(arg1) == "history")
+	{
+		TradeHouse::instance().SendHistory(ch, 0);
+	}
+}
+#endif
+
+Open Packet.h
+
+Search:
+HEADER_GC_AUTH_SUCCESS_OPENID	= 154,
+
+Add after:
+
+#ifdef TRADEHOUSE_SYSTEM
+	HEADER_GC_TRADEHOUSE_ITEM = 182,
+#endif
+
+
+Search:
+typedef struct SPacketGGSetup
+
+Add BEFORE:
+
+#ifdef TRADEHOUSE_SYSTEM
+
+enum Tradehouse
+{
+	TRADEHOUSE_ITEM_PACK = 20, // Server will send this amount of items in one page
+};
+
+typedef struct STItem
+{
+	DWORD unique;
+	DWORD vnum;
+	DWORD price;
+	WORD count;
+	char owner[25];
+	long alSockets[3];
+	TPlayerItemAttribute aAttr[7];
+	long expire;
+	STItem() : unique(0), vnum(0), price(0), count(0), expire(0) {
+		memset(&alSockets, 0, sizeof(alSockets));
+		memset(&aAttr, 0, sizeof(aAttr));
+		sprintf(owner, "NONAME");
+	}
+} TradehouseItem; // for packets
+
+typedef struct SPacketTradehouseItem
+{
+	BYTE header;
+	TradehouseItem items[TRADEHOUSE_ITEM_PACK];
+} TPacketTradehouseItem;
+
+#endif
+
+
+Open main.cpp
+
+Add after includes:
+
+#ifdef TRADEHOUSE_SYSTEM
+#include "tradehouse.h"
+#endif
+
+Search:
+
+	DSManager dsManager;
+
+Add after:
+
+#ifdef TRADEHOUSE_SYSTEM
+	TradeHouse TradeHouseManager;
+#endif
+
+Open service.h
+
+Add:
+
+#define TRADEHOUSE_SYSTEM
+#define TRADEHOUSE_BALANCE_VNUM 80008 // Change item vnum if you need

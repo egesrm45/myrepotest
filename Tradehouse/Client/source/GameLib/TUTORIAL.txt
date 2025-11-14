@@ -1,0 +1,24 @@
+Open ItemManager.cpp
+
+Search: #include "ItemManager.h"
+
+Add BEFORE:
+
+#ifdef TRADEHOUSE
+#include "../../extern/include/Python-2.7/python.h" // Change to your path if you need
+#include "../UserInterface/PythonTradehouse.h"
+#endif
+
+
+Search in LoadItemTable function:
+
+		CItemData * pItemData;
+		DWORD dwVnum = table->dwVnum;
+
+
+Add after:
+
+#ifdef TRADEHOUSE
+		PythonTradehouse::Instance().AddItemName(table->szLocaleName, table->dwVnum);
+#endif
+

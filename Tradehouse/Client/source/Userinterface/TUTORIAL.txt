@@ -1,0 +1,195 @@
+Add that 3 files to your UserInterface project.
+
+Open Locale_inc.h
+
+Add:
+#define TRADEHOUSE
+
+Open Packet.h
+
+Search:
+#include "../gamelib/RaceData.h"
+
+Add after:
+#ifdef TRADEHOUSE
+#include "TradehouseHelper.h"
+#endif
+
+Search:
+HEADER_GC_AUTH_SUCCESS_OPENID				= 154,
+
+Add after:
+#ifdef TRADEHOUSE
+	HEADER_GC_TRADEHOUSE_ITEM = 182,
+#endif
+
+Search:
+typedef struct packet_observer_add
+
+Add BEFORE:
+
+#ifdef TRADEHOUSE
+enum TradehouseEnum
+{
+	TRADEHOUSE_ITEM_PACK = 20, // Server will send this amount of items in one page
+};
+
+typedef struct SPacketTradehouseItem
+{
+	BYTE header;
+	TradehouseItem items[TRADEHOUSE_ITEM_PACK];
+} TPacketTradehouseItem;
+#endif
+
+
+Open PythonApplication.h
+
+Add after includes:
+#ifdef TRADEHOUSE
+#include "PythonTradehouse.h"
+#endif
+
+Search:
+CItemManager				m_kItemMgr;
+
+Add after:
+#ifdef TRADEHOUSE
+		PythonTradehouse			m_TradeHouse;
+#endif
+
+
+Open PythonNetworkStream.cpp
+
+Search:
+
+			Set(HEADER_GC_DRAGON_SOUL_REFINE,		CNetworkPacketHeaderMap::TPacketType(sizeof(TPacketGCDragonSoulRefine), STATIC_SIZE_PACKET));
+
+Add after:
+
+#ifdef TRADEHOUSE
+			Set(HEADER_GC_TRADEHOUSE_ITEM, CNetworkPacketHeaderMap::TPacketType(sizeof(TPacketTradehouseItem), STATIC_SIZE_PACKET));
+#endif
+
+Open PythonNetworkStream.h
+
+Search:
+bool SendAnswerMakeGuildPacket(const char * c_szName);
+
+Add after:
+
+#ifdef TRADEHOUSE
+		bool RecvTradehousePacket();
+#endif
+
+Open PythonNetworkStreamCommand.cpp
+
+Add after includes:
+#ifdef TRADEHOUSE
+#include "PythonTradehouse.h"
+#endif
+
+
+Search:
+else if (!strcmpi(szCmd, "gift"))
+
+Add BEFORE:
+
+#ifdef TRADEHOUSE
+	else if (!strcmpi(szCmd, "TradehouseInfo"))
+	{
+		int result = atoi(TokenVector[1].c_str());
+		int ownerflag = atoi(TokenVector[2].c_str());
+		PythonTradehouse::Instance().UpdateResult(result, ownerflag);
+	}
+	else if (!strcmpi(szCmd, "TradehouseBalance"))
+	{
+		int result = atoi(TokenVector[1].c_str());
+		PythonTradehouse::Instance().UpdateBalance(result);
+	}
+	else if (!strcmpi(szCmd, "TradehouseRefresh"))
+	{
+		PythonTradehouse::Instance().Refresh();
+	}
+	else if (!strcmpi(szCmd, "TradehouseHistory"))
+	{
+		PythonTradehouse::Instance().AppendHistory(TokenVector[1].c_str(), TokenVector[2].c_str(), TokenVector[3].c_str(), TokenVector[4].c_str(), TokenVector[5].c_str());
+	}
+	
+#endif
+
+
+Open PythonNetworkStreamPhaseGame.cpp
+
+Search:
+
+			case HEADER_GC_PING:
+				ret = RecvPingPacket();
+				break;
+
+Add BEFORE:
+
+#ifdef TRADEHOUSE
+			case HEADER_GC_TRADEHOUSE_ITEM:
+				ret = RecvTradehousePacket();
+				break;
+#endif
+
+Open PythonNetworkStreamPhaseGameActor.cpp
+
+Add after includes:
+
+#ifdef TRADEHOUSE
+#include "PythonTradehouse.h"
+bool CPythonNetworkStream::RecvTradehousePacket()
+{
+	TPacketTradehouseItem p;
+	if (!Recv(sizeof(TPacketTradehouseItem), &p))
+	{
+		TraceError("Recv RecvTradehousePacket size Packet Error");
+		return false;
+	}
+
+	PythonTradehouse::Instance().ClearItems();
+
+	for (size_t i = 0; i < TRADEHOUSE_ITEM_PACK; i++)
+		PythonTradehouse::Instance().AddItem(p.items[i]);
+	
+	return true;
+}
+#endif
+
+Open StdAfx.h (UserInterface)
+
+Search:
+
+void initMessenger();
+
+Add after:
+
+#ifdef TRADEHOUSE
+void inittradehouse();
+#endif
+
+Open UserInterface.cpp
+
+Search:
+#include "WiseLogicXTrap.h"
+
+Add after:
+#ifdef TRADEHOUSE
+#include "PythonTradehouse.h"
+#endif
+
+Search:
+	initServerStateChecker();
+
+Add after:
+
+#ifdef TRADEHOUSE
+	inittradehouse();
+#endif
+
+
+
+
+CLIENT SOURCE DONE.
